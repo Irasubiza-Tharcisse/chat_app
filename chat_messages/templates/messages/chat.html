@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Chat messages {% endblock %}}
+{% block content %}
+        <body>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat Room</h2>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Messages will be dynamically inserted here -->
+                    {{ sent_message }}
+                </div>
+                <form id="message-form" method="POST" action="/chat">
+                    {% csrf_token %}
+                    <div class="chat-input">
+                        <input type="text" name="content" id="message-input" placeholder="Type a message..." required />
+                        <button type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
+
+            <script>
+                // Internal JavaScript
+                document.getElementById('message-form').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const input = document.getElementById('message-input');
+                    const messageText = input.value;
+
+                    if (messageText.trim() !== '') {
+                        // Create a new message element for the sent message
+                        const messageContainer = document.createElement('div');
+                        messageContainer.classList.add('message', 'sent');
+
+                        const messageInfo = document.createElement('div');
+                        messageInfo.classList.add('message-info');
+                        messageInfo.innerHTML = `<span class="sender">You</span><span class="time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>`;
+
+                        const messageContent = document.createElement('div');
+                        messageContent.classList.add('message-text');
+                        messageContent.textContent = messageText;
+
+                        messageContainer.appendChild(messageInfo);
+                        messageContainer.appendChild(messageContent);
+                        document.getElementById('chat-messages').appendChild(messageContainer);
+
+                        // Clear the input field
+                        input.value = '';
+                        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight; // Scroll to the bottom
+
+                        // Send the message to the server
+                        const formData = new FormData(this);
+                        fetch(this.action, {
+                            method: 'POST',
+                            body: formData,
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.text(); // You can handle the response if needed
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                    }
+                });
+            </script>
+        </body>
+
+    {% endblock %}

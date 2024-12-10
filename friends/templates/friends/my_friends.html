@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Add friends {% endblock %}
+{% block content %}
+<body>
+    <!-- friends_list.html -->
+    <h2>Your Friends</h2>
+    <ul>
+        {% for friend in friends %}
+            <li>{{ friend.friend.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+{% endblock %}

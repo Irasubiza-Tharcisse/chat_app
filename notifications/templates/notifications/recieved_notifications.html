@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Recieved Notifications {% endblock %}
+
+{% block content %}
+
+  <div>
+      <h2>RECIEVED NOTIFICATIONS</h2>
+      <div class="card">
+          <div class="card-body">
+              <i class="fa fa-pen fa-xs edit"></i>
+                <div style="font-size: 20px; font-weight: ;">
+                    {% if  notifications %}
+                        {% for notification in notifications %}
+                          {{ notification.user }}
+                          {{ notification.message }}
+                          {{ notification.created_at }}
+                          {% if not notification.is_read %}
+                              <strong>(New)</strong>
+                          {% endif %}    
+                            <br><hr>
+                        {% endfor %}    
+                    {% else %}
+                        <p>
+                              <strong>notifications available.</strong>
+                        </p>
+                    {% endif %}
+                </div>
+          </div>
+      </div>
+  </div>
+
+{% endblock %}

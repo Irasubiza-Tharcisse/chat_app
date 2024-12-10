@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Chat messages {% endblock %}
+
+{% block content %}
+
+<div>
+    <h2>RECIEVED MESSAGES</h2>
+    <div class="card">
+        <div class="card-body">
+            <i class="fa fa-pen fa-xs edit"></i>
+                    <div style="font-size: 20px; font-weight: ;">
+                  
+                      {% if messages %}
+                        
+                        {% for message in messages %}
+                           
+                        <a href="/chat"> 
+                          {{ message.sender }}
+                          {{ message.content }}
+                          {{ message.created_at }}
+                          {% if not message.is_read %}
+                              <strong>(New)</strong>
+                          {% endif %}
+                         </a>
+                            <br><br><hr>
+                        {% endfor %}
+                    
+                    {% else %}
+                        <p>
+                              <strong>messages available.</strong>
+                        </p>
+                       
+                    {% endif %}
+                        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

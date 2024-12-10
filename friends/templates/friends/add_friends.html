@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Add friends {% endblock %}
+{% block content %}
+
+<div class="user-list-container">
+    <h2 class="user-list-title">User List</h2>
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="user-list">
+        {% for user in users %}
+            <div class="user-item">
+                <span class="user-username">{{ user.username }}</span>
+                <a href="{% url 'add_friend' user.id %}" class="add-friend-button">Add Friend</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
